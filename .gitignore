@@ -1,0 +1,13 @@
+
+*.settings
+*.ccsproject
+*.cproject
+*.project
+*.cmd
+
+*.opt
+*.d
+*.obj
+*.mk
+*.map
+*.xml
