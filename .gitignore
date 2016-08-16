@@ -8,6 +8,6 @@
 *.opt
 *.d
 *.obj
-*.mk
 *.map
 *.xml
+*ccxml
