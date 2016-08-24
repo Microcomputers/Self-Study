@@ -1,16 +1,11 @@
 
-*.settings
-*.ccsproject
-*.cproject
-*.project
-*.cmd
-*.mk
-*.opt
-*.d
-*.obj
-*.map
-*.xml
-*ccxml
-*.txt
+*
+!/**/
+!*.*
+!makefile
+!Makefile
 
-*.pdf
+*.out
+*.d
+*obj
+
