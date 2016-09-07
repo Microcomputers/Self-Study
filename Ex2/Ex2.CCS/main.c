@@ -1,9 +1,12 @@
 #include <msp430fr5739.h>
 #include "functions.h"
+#include "temp.h"
 
 /*
  	main.c
-	Switches and LEDs
+	1. Switches and LEDs
+	2.
+	3. Temp sens
  */
 
 
