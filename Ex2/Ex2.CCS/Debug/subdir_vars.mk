@@ -8,26 +8,32 @@ CMD_SRCS += \
 
 C_SRCS += \
 ../functions.c \
-../main.c 
+../main.c \
+../temp.c 
 
 OBJS += \
 ./functions.obj \
-./main.obj 
+./main.obj \
+./temp.obj 
 
 C_DEPS += \
 ./functions.d \
-./main.d 
+./main.d \
+./temp.d 
 
 C_DEPS__QUOTED += \
 "functions.d" \
-"main.d" 
+"main.d" \
+"temp.d" 
 
 OBJS__QUOTED += \
 "functions.obj" \
-"main.obj" 
+"main.obj" \
+"temp.obj" 
 
 C_SRCS__QUOTED += \
 "../functions.c" \
-"../main.c" 
+"../main.c" \
+"../temp.c" 
 
 
