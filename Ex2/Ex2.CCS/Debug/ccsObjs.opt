@@ -1,1 +1,1 @@
-"./functions.obj" "./main.obj" "./temp.obj" "../lnk_msp430fr5739.cmd" -llibmath.a -llibc.a 
+"./main.obj" "./system.obj" "../lnk_msp430fr5739.cmd" -llibmath.a -llibc.a 

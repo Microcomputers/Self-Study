@@ -1,6 +1,6 @@
 #include <msp430fr5739.h>
-#include "functions.h"
-#include "temp.h"
+#include "system.h"
+//#include "temp.h"
 
 /*
  	main.c
@@ -8,7 +8,6 @@
 	2.
 	3. Temp sens
  */
-
 
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer

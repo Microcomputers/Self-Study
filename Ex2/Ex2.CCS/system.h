@@ -1,9 +1,12 @@
-#ifndef FUNCTION_H
-#define FUNCTION_H 
+#ifndef SYSTEM_H
+#define SYSTEM_H 
 #include <msp430fr5739.h>
 
 // Type definitions
 typedef unsigned char		uc;
+
+//variables
+//
 
 // User definitions
 #define LED_TOG_DLY_CONST	1000
@@ -21,5 +24,8 @@ void SWITCHEs_INIT();
 inline void EnableSwitches();
 inline void DisableSwitches();
 inline void StartDebounceTimer(uc ucDelay);
+
+extern unsigned int CalibrateADC(void);
+extern void TakeADCMeas(void);
 
 #endif

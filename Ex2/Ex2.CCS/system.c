@@ -1,4 +1,5 @@
-#include "functions.h"
+#include "system.h"
+volatile unsigned int ADCResult = 0;
 
 void LEDs_INIT()
 {
@@ -49,6 +50,55 @@ inline void StartDebounceTimer(uc ucDelay)
 		TA1CCR0 = SW_DEB_CONST;
 	TA1CTL = TASSEL_1 + MC_1;				// ACLK, up mode
 }
+
+
+/**********************************************************************//**
+ * @brief  Calibrate thermistor or accelerometer
+ * 
+ * @param  none 
+ *  
+ * @return none
+ *************************************************************************/
+unsigned int CalibrateADC(void)
+{
+  unsigned char CalibCounter =0;
+  unsigned int Value = 0;
+
+  // Disable interrupts & user input during calibration
+  DisableSwitches();            
+  while(CalibCounter <50)
+    {
+      P3OUT ^= BIT4;
+      CalibCounter++;
+      while (ADC10CTL1 & BUSY); 
+      ADC10CTL0 |= ADC10ENC | ADC10SC ;       // Start conversion 
+      __bis_SR_register(CPUOFF + GIE);        // LPM0, ADC10_ISR will force exit
+      __no_operation(); 
+      Value += ADCResult;
+    }
+    Value = Value/50;
+    // Reenable switches after calibration
+    EnableSwitches();
+    return Value;
+}
+
+/**********************************************************************//**
+ * @brief  Take ADC Measurement
+ * 
+ * @param  none 
+ *  
+ * @return none
+ *************************************************************************/
+void TakeADCMeas(void)
+{  
+  while (ADC10CTL1 & BUSY); 
+  ADC10CTL0 |= ADC10ENC | ADC10SC ;       // Start conversion 
+  __bis_SR_register(CPUOFF + GIE);        // LPM0, ADC10_ISR will force exit
+  __no_operation();                       // For debug only
+}
+
+
+
 
 // Switch presses causes this debounce ISR to fire
 #pragma vector = TIMER1_A0_VECTOR
