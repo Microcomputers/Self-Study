@@ -10,6 +10,7 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./main.obj" \
 "./system.obj" \
+"./temp.obj" \
 "../lnk_msp430fr5739.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibmath.a \
@@ -152,8 +153,8 @@ LEDsAndPushButtons.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "main.d" "system.d" 
-	-$(RM) "main.obj" "system.obj" 
+	-$(RM) "main.d" "system.d" "temp.d" 
+	-$(RM) "main.obj" "system.obj" "temp.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

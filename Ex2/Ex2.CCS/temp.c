@@ -44,7 +44,11 @@
 #include "system.h"
 
 //variables
+extern volatile unsigned int ADCResult; 
 volatile unsigned char ThreshRange[3]={0,0,0};
+unsigned int CalValue = 0;
+unsigned int ADCTemp =0;
+
 
 /**********************************************************************//**
  * @brief  Setup thermistor
@@ -94,13 +98,28 @@ void ShutDownTherm(void)
   // Turn off Vcc
   P2DIR &= ~BIT7;
   P2OUT &= ~BIT7;
-  
   // Turn off ADC Channel
   P1SEL1 &= ~BIT4;  
   P1SEL0 &= ~BIT4; 
- 
- // Turn off ADC
+  // Turn off ADC
   ADC10CTL0 &= ~(ADC10ENC + ADC10ON);
   ADC10IE &= ~ADC10IE0;
   ADC10IFG = 0;    
+}
+
+unsigned int getThermisterVal()
+{
+	SetupThermistor();
+	CalValue = CalibrateADC();
+  	TakeADCMeas();
+	if (ADCResult >= CalValue)        
+	{
+	  //temp = DOWN;
+	  ADCTemp = ADCResult - CalValue;
+	}
+	else
+	{
+	  //temp = UP;
+	  ADCTemp = CalValue - ADCResult; 
+	}                         
 }
