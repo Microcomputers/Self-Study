@@ -9,31 +9,37 @@ CMD_SRCS += \
 C_SRCS += \
 ../main.c \
 ../system.c \
-../temp.c 
+../temp.c \
+../uart.c 
 
 OBJS += \
 ./main.obj \
 ./system.obj \
-./temp.obj 
+./temp.obj \
+./uart.obj 
 
 C_DEPS += \
 ./main.d \
 ./system.d \
-./temp.d 
+./temp.d \
+./uart.d 
 
 C_DEPS__QUOTED += \
 "main.d" \
 "system.d" \
-"temp.d" 
+"temp.d" \
+"uart.d" 
 
 OBJS__QUOTED += \
 "main.obj" \
 "system.obj" \
-"temp.obj" 
+"temp.obj" \
+"uart.obj" 
 
 C_SRCS__QUOTED += \
 "../main.c" \
 "../system.c" \
-"../temp.c" 
+"../temp.c" \
+"../uart.c" 
 
 
