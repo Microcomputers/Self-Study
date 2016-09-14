@@ -50,6 +50,24 @@ unsigned int CalValue = 0;
 unsigned int ADCTemp =0;
 
 
+unsigned int getThermisterVal()
+{
+	SetupThermistor();
+	CalValue = CalibrateADC();
+  	TakeADCMeas();
+	if (ADCResult >= CalValue)
+	{
+	  //temp = DOWN;
+	  ADCTemp = ADCResult - CalValue;
+	}
+	else
+	{
+	  //temp = UP;
+	  ADCTemp = CalValue - ADCResult;
+	}
+	return ADCTemp;
+}
+
 /**********************************************************************//**
  * @brief  Setup thermistor
  * 
@@ -58,7 +76,7 @@ unsigned int ADCTemp =0;
  * @return none
  *************************************************************************/
 void SetupThermistor(void)
-{
+{   
   // ~16KHz sampling
   //Turn on Power
   P2DIR |= BIT7;
@@ -107,19 +125,3 @@ void ShutDownTherm(void)
   ADC10IFG = 0;    
 }
 
-unsigned int getThermisterVal()
-{
-	SetupThermistor();
-	CalValue = CalibrateADC();
-  	TakeADCMeas();
-	if (ADCResult >= CalValue)        
-	{
-	  //temp = DOWN;
-	  ADCTemp = ADCResult - CalValue;
-	}
-	else
-	{
-	  //temp = UP;
-	  ADCTemp = CalValue - ADCResult; 
-	}                         
-}

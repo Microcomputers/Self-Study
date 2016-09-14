@@ -13,10 +13,9 @@ int main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
 	
 	unsigned int tempVal = 0;   // temp readings
-	LEDs_INIT(); 				// Init leds
-	SWITCHEs_INIT(); 			// Init Switches
 
-	
+	LEDs_INIT(); 				// Init leds
+	SWITCHEs_INIT(); 			// Init Switches	
 
 	while (1)
 	{
