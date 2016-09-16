@@ -22,6 +22,7 @@ int main(void) {
 	{
 		__bis_SR_register(LPM4_bits + GIE);	// Enter LPM4 with interrupts enabled
 		tempVal = getThermisterVal();
+
 	}
 	return 0;
 }
