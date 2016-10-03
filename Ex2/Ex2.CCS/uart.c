@@ -1,6 +1,6 @@
 #include "uart.h"
 //Serial buffer
-volatile unsigned char TX_Buffer[7] = {0,0,0,0,0,0,0};
+volatile unsigned char TX_Buffer[7] = {0,1,2,3,4,5,6};
 
 //9600 baud
 void serialBegin()
@@ -18,11 +18,12 @@ void serialBegin()
 
 void serialWrite()
 {
-	int counter = 7;
+	int counter = 0;
 	while (counter < 7)
 	{
 	    while (!(UCA0IFG&UCTXIFG));             // USCI_A0 TX buffer ready?
 	    UCA0TXBUF = TX_Buffer[counter];
 	    counter++;		
 	}	
+	counter = 0;
 }
