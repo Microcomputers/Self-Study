@@ -1,5 +1,5 @@
-#ifndef timefuncs
-#define timefuncs
+#ifndef TIMETESTER_H
+#define TIMETESTER_H
 
 #include "clic3.h"
 
