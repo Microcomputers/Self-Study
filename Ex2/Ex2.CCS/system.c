@@ -1,3 +1,4 @@
+#include "msp430fr5739.h"
 #include "system.h"
 volatile unsigned int ADCResult = 0;
 
@@ -61,25 +62,28 @@ inline void StartDebounceTimer(uc ucDelay)
  *************************************************************************/
 unsigned int CalibrateADC(void)
 {
-  unsigned char CalibCounter =0;
-  unsigned int Value = 0;
+	unsigned char CalibCounter =0;
+	unsigned int Value = 0;
 
-  // Disable interrupts & user input during calibration
-  DisableSwitches();            
-  while(CalibCounter <50)
-    {
-      P3OUT ^= BIT4;
-      CalibCounter++;
-      while (ADC10CTL1 & BUSY); 
-      ADC10CTL0 |= ADC10ENC | ADC10SC ;       // Start conversion 
-      __bis_SR_register(CPUOFF + GIE);        // LPM0, ADC10_ISR will force exit
-      __no_operation(); 
-      Value += ADCResult;
-    }
-    Value = Value/50;
-    // Reenable switches after calibration
-    EnableSwitches();
-    return Value;
+	// Disable interrupts & user input during calibration
+	__disable_interrupt();	//Turn off any interupts just incase
+	DisableSwitches();  
+
+	while(CalibCounter <50)
+	{
+		P3OUT ^= BIT4;
+		CalibCounter++;
+		ADC10CTL0 |= ADC10ENC | ADC10SC ;       // Start conversion 
+		while (ADC10CTL1 & BUSY); 
+		__bis_SR_register(CPUOFF + GIE);        // LPM0, ADC10_ISR will force exit
+		__no_operation(); 
+		Value += ADCResult;
+	}
+	Value = Value/50;
+	// Reenable switches after calibration
+	__enable_interrupt();	//enable interupts
+	EnableSwitches();
+	return Value;
 }
 
 /**********************************************************************//**
