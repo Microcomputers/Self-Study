@@ -3,7 +3,7 @@
 #include <msp430fr5739.h>
 
 // Type definitions
-typedef unsigned char		uc;
+typedef unsigned char uc;
 
 //variables
 //
@@ -20,12 +20,15 @@ void LEDs_INIT();
 //Switches init
 void SWITCHEs_INIT();
 
+void SetupThermistor(void);
+void ShutDownTherm(void);
+
 //Enable/Disable Switches
 inline void EnableSwitches();
 inline void DisableSwitches();
 inline void StartDebounceTimer(uc ucDelay);
 
-extern unsigned int CalibrateADC(void);
-extern void TakeADCMeas(void);
+void CalibrateADC(void);
+
 
 #endif

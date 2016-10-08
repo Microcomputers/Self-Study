@@ -7,39 +7,39 @@ CMD_SRCS += \
 ../lnk_msp430fr5739.cmd 
 
 C_SRCS += \
+../adc.c \
 ../main.c \
 ../system.c \
-../temp.c \
 ../uart.c 
 
 OBJS += \
+./adc.obj \
 ./main.obj \
 ./system.obj \
-./temp.obj \
 ./uart.obj 
 
 C_DEPS += \
+./adc.d \
 ./main.d \
 ./system.d \
-./temp.d \
 ./uart.d 
 
 C_DEPS__QUOTED += \
+"adc.d" \
 "main.d" \
 "system.d" \
-"temp.d" \
 "uart.d" 
 
 OBJS__QUOTED += \
+"adc.obj" \
 "main.obj" \
 "system.obj" \
-"temp.obj" \
 "uart.obj" 
 
 C_SRCS__QUOTED += \
+"../adc.c" \
 "../main.c" \
 "../system.c" \
-"../temp.c" \
 "../uart.c" 
 
 

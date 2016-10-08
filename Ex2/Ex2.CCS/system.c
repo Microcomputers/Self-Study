@@ -1,6 +1,8 @@
 #include "msp430fr5739.h"
 #include "system.h"
-volatile unsigned int ADCResult = 0;
+
+volatile unsigned char ThreshRange[3]={0,0,0};
+extern unsigned int CalValue_t;
 
 void LEDs_INIT()
 {
@@ -8,7 +10,6 @@ void LEDs_INIT()
 	PJDIR |= BIT0 + BIT1; //set pins PJ.0 and PJ.1 to outputs
 	PJOUT &= ~(BIT0 + BIT1); //set pins to low
 }
-
 
 void SWITCHEs_INIT()
 {
@@ -25,12 +26,44 @@ void SWITCHEs_INIT()
 	P4IFG = 0;						// P4 IFG cleared
 }
 
-// Disable switches interfaced to P4.0 and P4.1
-inline void DisableSwitches() 
+void SetupThermistor(void)
+{   
+    // ~16KHz sampling
+    //Turn on Power
+    P2DIR |= BIT7;
+    P2OUT |= BIT7;
+    // Configure ADC
+    P1SEL1 |= BIT4;  
+    P1SEL0 |= BIT4; 
+    // Allow for settling delay 
+    __delay_cycles(50000);
+    // Configure ADC
+    ADC10CTL0 &= ~ADC10ENC; 
+    ADC10CTL0 = ADC10SHT_7 + ADC10ON;        // ADC10ON, S&H=192 ADC clks
+    // ADCCLK = MODOSC = 5MHz
+    ADC10CTL1 = ADC10SHS_0 + ADC10SHP + ADC10SSEL_0; 
+    ADC10CTL2 = ADC10RES;                    // 10-bit conversion results
+    ADC10MCTL0 = ADC10INCH_4;                // A4 ADC input select; Vref=AVCC
+    ADC10IE = ADC10IE0;                      // Enable ADC conv complete interrupt
+    // Setup Thresholds for relative difference in Thermistor measurements
+    ThreshRange[0]=15;
+    ThreshRange[1]=25;
+    ThreshRange[2]=45;
+    __enable_interrupt();
+}
+
+void ShutDownTherm(void)
 {
-	P4IFG = 0;								// P4 IFG cleared
-	P4IE &= ~(BIT0 + BIT1);					// P4.0 and P4.1 interrupts disabled
-	P4IFG = 0;								// P4 IFG cleared
+    // Turn off Vcc
+    P2DIR &= ~BIT7;
+    P2OUT &= ~BIT7;
+    // Turn off ADC Channel
+    P1SEL1 &= ~BIT4;  
+    P1SEL0 &= ~BIT4; 
+    // Turn off ADC
+    ADC10CTL0 &= ~(ADC10ENC + ADC10ON);
+    ADC10IE &= ~ADC10IE0;
+    ADC10IFG = 0;    
 }
 
 // Enable switches interfaced to P4.0 and P4.1
@@ -38,6 +71,14 @@ inline void EnableSwitches()
 {
 	P4IFG = 0;								// P4 IFG cleared
 	P4IE = BIT0 + BIT1;						// P4.0 and P4.1 interrupts enabled
+}
+
+// Disable switches interfaced to P4.0 and P4.1
+inline void DisableSwitches() 
+{
+	P4IFG = 0;								// P4 IFG cleared
+	P4IE &= ~(BIT0 + BIT1);					// P4.0 and P4.1 interrupts disabled
+	P4IFG = 0;								// P4 IFG cleared
 }
 
 // Simple software switch debounce model as a constant delay
@@ -52,61 +93,39 @@ inline void StartDebounceTimer(uc ucDelay)
 	TA1CTL = TASSEL_1 + MC_1;				// ACLK, up mode
 }
 
-
-/**********************************************************************//**
- * @brief  Calibrate thermistor or accelerometer
- * 
- * @param  none 
- *  
- * @return none
- *************************************************************************/
-unsigned int CalibrateADC(void)
+void CalibrateADC(void)
 {
 	unsigned char CalibCounter =0;
 	unsigned int Value = 0;
 
 	// Disable interrupts & user input during calibration
-	__disable_interrupt();	//Turn off any interupts just incase
-	DisableSwitches();  
+	DisableSwitches();
+	__disable_interrupt();
 
-	while(CalibCounter <50)
+	ADC10CTL0 &= ~ADC10ENC;		//Toggle ENC bit
+	ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_4;	//Sample thermistor      
+	while(CalibCounter < 50)
 	{
 		P3OUT ^= BIT4;
 		CalibCounter++;
-		ADC10CTL0 |= ADC10ENC | ADC10SC ;       // Start conversion 
-		while (ADC10CTL1 & BUSY); 
-		__bis_SR_register(CPUOFF + GIE);        // LPM0, ADC10_ISR will force exit
-		__no_operation(); 
-		Value += ADCResult;
+		ADC10CTL0 |= ADC10ENC | ADC10SC;    // Start conversion 
+		while (ADC10CTL1 & BUSY); 			// wait for sample to be done
+		Value += ADC10MEM0;
 	}
-	Value = Value/50;
-	// Reenable switches after calibration
-	__enable_interrupt();	//enable interupts
+	CalValue_t = Value/50;
+	// Reenable switches and interrupts after calibration
 	EnableSwitches();
-	return Value;
+	__enable_interrupt();
 }
 
-/**********************************************************************//**
- * @brief  Take ADC Measurement
- * 
- * @param  none 
- *  
- * @return none
- *************************************************************************/
-void TakeADCMeas(void)
-{  
-  while (ADC10CTL1 & BUSY); 
-  ADC10CTL0 |= ADC10ENC | ADC10SC ;       // Start conversion 
-  __bis_SR_register(CPUOFF + GIE);        // LPM0, ADC10_ISR will force exit
-  __no_operation();                       // For debug only
-}
-
-
-
+/****
+	Interrupt voids
+*/
 
 // Switch presses causes this debounce ISR to fire
 #pragma vector = TIMER1_A0_VECTOR
-__interrupt void Timer1_A0_ISR(void) {
+__interrupt void Timer1_A0_ISR(void) 
+{
 	TA1CCTL0 = 0;
 	TA1CTL = 0;
 	EnableSwitches();
@@ -114,7 +133,8 @@ __interrupt void Timer1_A0_ISR(void) {
 
 // Port 4 ISR to detect switch presses
 #pragma vector = PORT4_VECTOR
-__interrupt void Port_4_ISR(void) {
+__interrupt void Port_4_ISR(void) 
+{
 	// See link to get information on __even_in_range intrinsic
 	// https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/238317
 	switch(__even_in_range(P4IV, P4IV_P4IFG1)) {

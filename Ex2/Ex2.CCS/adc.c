@@ -38,90 +38,39 @@
  * Created: Version 1.0 04/13/2011
  *          Version 1.1 05/11/2011
  *          Version 1.2 08/31/2011
- *  
+ *          Version 2.0 10/08/2016
+ *          
  ******************************************************************************/
-#include "temp.h"
+#include "adc.h"
 #include "system.h"
 
 //variables
-extern volatile unsigned int ADCResult; 
-volatile unsigned char ThreshRange[3]={0,0,0};
-unsigned int CalValue = 0;
-unsigned int ADCTemp =0;
+volatile unsigned int ADCResult; 
+unsigned int CalValue_t;
+extern unsigned int ADCTResult_t;
 
 
-unsigned int getThermisterVal()
+void getThermisterVal()
 {
-	SetupThermistor();
-	CalValue = CalibrateADC();
-  	TakeADCMeas();
-	if (ADCResult >= CalValue)
-	{
-	  //temp = DOWN;
-	  ADCTemp = ADCResult - CalValue;
-	}
-	else
-	{
-	  //temp = UP;
-	  ADCTemp = CalValue - ADCResult;
-	}
-	return ADCTemp;
+    if (ADCResult >= CalValue_t)
+    {
+        ADCTResult_t = ADCResult - CalValue_t;
+    }
+    else
+    {
+        ADCTResult_t = CalValue_t - ADCResult; 
+    }
 }
 
-/**********************************************************************//**
- * @brief  Setup thermistor
- * 
- * @param  none 
- *  
- * @return none
- *************************************************************************/
-void SetupThermistor(void)
-{   
-  // ~16KHz sampling
-  //Turn on Power
-  P2DIR |= BIT7;
-  P2OUT |= BIT7;
-  
-  // Configure ADC
-  P1SEL1 |= BIT4;  
-  P1SEL0 |= BIT4; 
-  
-  // Allow for settling delay 
-  __delay_cycles(50000);
-  
-  // Configure ADC
-  ADC10CTL0 &= ~ADC10ENC; 
-  ADC10CTL0 = ADC10SHT_7 + ADC10ON;        // ADC10ON, S&H=192 ADC clks
-  // ADCCLK = MODOSC = 5MHz
-  ADC10CTL1 = ADC10SHS_0 + ADC10SHP + ADC10SSEL_0; 
-  ADC10CTL2 = ADC10RES;                    // 10-bit conversion results
-  ADC10MCTL0 = ADC10INCH_4;                // A4 ADC input select; Vref=AVCC
-  ADC10IE = ADC10IE0;                      // Enable ADC conv complete interrupt
-  
-  // Setup Thresholds for relative difference in Thermistor measurements
-  ThreshRange[0]=15;
-  ThreshRange[1]=25;
-  ThreshRange[2]=45;
-}
 
-/**********************************************************************//**
- * @brief  ShutDownTherm
- * 
- * @param  none 
- *  
- * @return none
- *************************************************************************/
-void ShutDownTherm(void)
+
+//ADC ISR
+#pragma vector = ADC10_VECTOR
+__interrupt void ADC10_ISR (void)
 {
-  // Turn off Vcc
-  P2DIR &= ~BIT7;
-  P2OUT &= ~BIT7;
-  // Turn off ADC Channel
-  P1SEL1 &= ~BIT4;  
-  P1SEL0 &= ~BIT4; 
-  // Turn off ADC
-  ADC10CTL0 &= ~(ADC10ENC + ADC10ON);
-  ADC10IE &= ~ADC10IE0;
-  ADC10IFG = 0;    
+    ADC10CTL0 &= ~ADC10ENC;
+    ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_4;
+    ADCResult = ADC10MEM0;
+    ADC10CTL0 |= ADC10ENC | ADC10SC;
 }
 
