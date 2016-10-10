@@ -51,6 +51,12 @@ void TimeTest::end ()
 			maxcount++; 
 		} // another at maximum
 	    else {}
+
 	}
 	
+}
+
+uint16_t TimeTest::getTime()
+{
+	return this->totaltime;
 }

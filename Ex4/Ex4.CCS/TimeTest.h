@@ -15,10 +15,11 @@ private:
 	uint16_t totaltime;
 
 public:
+
 	void init();		// test init
 	void start();		// test start
 	void end();			// test end
-	
+	uint16_t getTime();		// returns totaltime
 };
 
 #endif
