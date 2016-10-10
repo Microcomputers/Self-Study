@@ -52,6 +52,9 @@ extern unsigned int ADCTResult_t;
 
 void getThermisterVal()
 {
+    //map 0 - 1023 to 0 - 5V, This is the voltage read 
+    //ADCResult = (ADCResult * 0.004882814);
+    //CalValue_t = (CalValue_t * 0.004882814);
     if (ADCResult >= CalValue_t)
     {
         ADCTResult_t = ADCResult - CalValue_t;
@@ -60,6 +63,12 @@ void getThermisterVal()
     {
         ADCTResult_t = CalValue_t - ADCResult; 
     }
+    //Convert the voltage to degrees Celsius
+    //The correct formula should be extracted from the temp sens data sheet
+    //ADCTResult_t = (ADCTResult_t * 0.004882814);
+    //ADCTResult_t = (ADCTResult_t - 0.5) * 100.0;
+    ADCTResult_t = ((ADCTResult_t * 27069) - 18169625) >> 16;
+    //ADCTResult_t = ((ADCTResult_t * 27069) - 18169625) ;
 }
 
 

@@ -25,7 +25,7 @@ int main(void) {
 
 		//__bis_SR_register(LPM4_bits + GIE);	// Enter LPM4 with interrupts enabled
 		getThermisterVal();
-		printf("%s%d\n", "Temp = ", ADCTResult_t);
+		printf("%s%d\n", "Temp = ", (int)ADCTResult_t);
 	}
 	return 0;
 }
