@@ -1,3 +1,4 @@
+#include <msp430fr5739.h>
 #include "TimeTest.h"
 
 void TimeTest::init ()
@@ -11,7 +12,7 @@ void TimeTest::start ()
 
 }
 
-void TimeTeset::end ()
+void TimeTest::end ()
 {
 	
 }
