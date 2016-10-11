@@ -1,10 +1,10 @@
 <h1>TO DO</h1>
 
  - [ ] <b>Add</b> `acceInit()`
- -   funtion prototypy -> `system.h`
+ -   funtion prototype -> `system.h`
  -   function implementation -> `system.c`
  - [ ] <b>Add</b> `SetupAccel()`
- -   funtion prototypy -> `system.h`
+ -   funtion prototype -> `system.h`
  -   function implementation -> `system.c`
  - [ ] <b>Modify</b> `ADC10_ISR` in `adc.c` for accel readings
  - [ ] <b>Write</b> `getAccelVal()` (something like `getThermisterVal()`)
