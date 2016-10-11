@@ -8,4 +8,5 @@
  -   function implementation -> `system.c`
  - [ ] <b>Modify</b> `ADC10_ISR` in `adc.c` for accel readings
  - [ ] <b>Write</b> `getAccelVal()` (something like `getThermisterVal()`)
- 
+ -   function prototype -> `adc.h`
+ -   function implementation -> `adc.c`
