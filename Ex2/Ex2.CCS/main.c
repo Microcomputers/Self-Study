@@ -23,7 +23,7 @@ int main(void) {
 	while (1)
 	{
 
-		//__bis_SR_register(LPM4_bits + GIE);	// Enter LPM4 with interrupts enabled
+		__bis_SR_register(LPM4_bits + GIE);	// Enter LPM4 with interrupts enabled
 		getThermisterVal();
 		printf("%s%d\n", "Temp = ", (int)ADCTResult_t);
 	}
