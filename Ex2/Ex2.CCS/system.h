@@ -16,6 +16,16 @@ typedef unsigned int uc_16;
 #define SW_DEB_CONST		1600			// Load into TA1CCR0 the value SW_DEB_CONST i.e. debounce time = 1600*1/8000 = 200ms
 #define SW_HALF_DEB_CONST	SW_DEB_CONST/2	// Shorter debounce time model assuming half
 
+//Pin Definintion
+#define ACC_X_PIN BIT0
+#define ACC_Y_PIN BIT1
+#define ACC_Z_PIN BIT2
+
+// Accelerometer Input Channel Definitions
+#define ACC_X_CHANNEL ADC10INCH_12
+#define ACC_Y_CHANNEL ADC10INCH_13
+#define ACC_Z_CHANNEL ADC10INCH_14
+
 //Clock init
 void clockInit();
 //LEDs init
@@ -36,6 +46,11 @@ inline void DisableSwitches();
 inline void StartDebounceTimer(uc ucDelay);
 
 void CalibrateADC(void);
+
+void acceInit();
+
+void SetupAccel();
+
 
 
 #endif

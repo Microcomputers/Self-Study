@@ -2,7 +2,7 @@
 #include "system.h"
 
 volatile unsigned char ThreshRange[3]={0,0,0};
-extern unsigned int CalValue_t;
+extern unsigned int CalValue_t, CalValue_x, CalValue_y, CalValue_z;
 
 void ledsInit(uc_8 ledNumber)
 {
@@ -156,9 +156,99 @@ void CalibrateADC(void)
 		Value += ADC10MEM0;
 	}
 	CalValue_t = Value/50;
+	//reset the counters
+	CalibCounter = 0;
+	Value = 0;
+
+	ADC10CTL0 &= ~ADC10ENC;		//Toggle ENC bit
+	ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_12;	//Sample thermistor
+	while(CalibCounter < 50)
+	{
+		P3OUT ^= BIT4;
+		CalibCounter++;
+		ADC10CTL0 |= ADC10ENC | ADC10SC;    // Start conversion
+		while (ADC10CTL1 & BUSY); 			// wait for sample to be done
+		Value += ADC10MEM0;
+	}
+	CalValue_x = Value/50;
+	//reset the counters
+	CalibCounter = 0;
+	Value = 0;
+
+	ADC10CTL0 &= ~ADC10ENC;		//Toggle ENC bit
+	ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_13;	//Sample thermistor
+	while(CalibCounter < 50)
+	{
+		P3OUT ^= BIT4;
+		CalibCounter++;
+		ADC10CTL0 |= ADC10ENC | ADC10SC;    // Start conversion
+		while (ADC10CTL1 & BUSY); 			// wait for sample to be done
+		Value += ADC10MEM0;
+	}
+	CalValue_y = Value/50;
+	//reset the counters
+	CalibCounter = 0;
+	Value = 0;
+
+	ADC10CTL0 &= ~ADC10ENC;		//Toggle ENC bit
+	ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_14;	//Sample thermistor
+	while(CalibCounter < 50)
+	{
+		P3OUT ^= BIT4;
+		CalibCounter++;
+		ADC10CTL0 |= ADC10ENC | ADC10SC;    // Start conversion
+		while (ADC10CTL1 & BUSY); 			// wait for sample to be done
+		Value += ADC10MEM0;
+	}
+	CalValue_z = Value/50;
+	//reset the counters
+	CalibCounter = 0;
+	Value = 0;
+
+	ADC10CTL0 &= ~ADC10ENC; // Toggle ENC bit. Need this to change the ADC10INCH_t value.
+	ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_4 ; // WE NEED TO START AT THE X AXES FIRST DUE TO HOW THE INTERUPT ROUTINE WORKS.
+
+
 	// Reenable switches and interrupts after calibration
 	EnableSwitches();
 	__enable_interrupt();
+}
+
+void acceInit()
+{
+	// P3.0,p3.1 and P3.2 are accelerometer inputs
+	P3OUT &= ~(BIT0 + BIT1 + BIT2);
+	P3DIR &= ~(BIT0 + BIT1 + BIT2);
+	P3REN |= ~(BIT0 + BIT1 + BIT2);
+	
+}
+
+void SetupAccel()
+{
+
+	//Setup  accelerometer
+	// ~20KHz sampling
+	//Configure GPIO
+	ACC_PORT_SEL0 |= ACC_X_PIN + ACC_Y_PIN + ACC_Z_PIN;    //Enable A/D channel inputs
+	ACC_PORT_SEL1 |= ACC_X_PIN + ACC_Y_PIN + ACC_Z_PIN;
+  	ACC_PORT_DIR &= ~(ACC_X_PIN + ACC_Y_PIN + ACC_Z_PIN);
+  	ACC_PWR_PORT_DIR |= ACC_PWR_PIN;              //Enable ACC_POWER
+  	ACC_PWR_PORT_OUT |= ACC_PWR_PIN;
+
+  	// Allow the accelerometer to settle before sampling any data 
+  	__delay_cycles(200000);   
+  
+  	//Setting up the ADC stuff 
+  	ADC10CTL0 &= ~ADC10ENC;                        // Ensure ENC is clear
+  	ADC10CTL0 = ADC10ON + ADC10SHT_5;  
+  	ADC10CTL1 = ADC10SHS_0 + ADC10SHP + ADC10CONSEQ_0 + ADC10SSEL_0;  
+  	ADC10CTL2 = ADC10RES;    
+  	ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_12;
+  	ADC10IV = 0x00;		//Clear all ADC12 channel int flags  
+  	ADC10IE |= ADC10IE0;	//Enable ADC10 interrupts
+  	
+  	__enable_interrupt();
+  	
 }
 
 /****

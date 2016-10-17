@@ -14,7 +14,7 @@
 #define button1Pin 1
 #define button2Pin 2
 
-unsigned int ADCTResult_t;
+unsigned int ADCTResult_t, ADCTResult_x, ADCTResult_y, ADCTResult_z;
 
 int main(void) {
 	WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer

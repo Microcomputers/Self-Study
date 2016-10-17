@@ -45,11 +45,14 @@
 #include "system.h"
 
 //variables
-volatile unsigned int ADCResult; 
-unsigned int CalValue_t;
-extern unsigned int ADCTResult_t;
+ 
+//volatile unsigned int ADCResult; 
+unsigned int CalValue_t, CalValue_x, CalValue_y, CalValue_z;
+extern unsigned int ADCTResult_t, ADCTResult_x, ADCTResult_y, ADCTResult_z;
 
+unsigned int ADC_counter = 0;
 
+/*
 void getThermisterVal()
 {
     //map 0 - 1023 to 0 - 5V, This is the voltage read 
@@ -71,15 +74,46 @@ void getThermisterVal()
     //ADCTResult_t = ((ADCTResult_t * 27069) - 18169625) ;
 }
 
-
+*/
 
 //ADC ISR
 #pragma vector = ADC10_VECTOR
 __interrupt void ADC10_ISR (void)
 {
-    ADC10CTL0 &= ~ADC10ENC;
-    ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_4;
-    ADCResult = ADC10MEM0;
-    ADC10CTL0 |= ADC10ENC | ADC10SC;
+    // temp sens
+    if (ADC_counter == 0)
+    {
+        ADC10CTL0 &= ~ADC10ENC;
+        ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_4;
+        ADCTResult_t = ADC10MEM0;
+        ADC_counter++;
+        ADC10CTL0 |= ADC10ENC | ADC10SC;        
+    }
+    else if (ADC_counter == 1)
+    {
+        ADC10CTL0 &= ~ADC10ENC;
+        ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_13;
+        ADCTResult_x = ADC10MEM0;
+        ADC_counter++;
+        ADC10CTL0 |= ADC10ENC | ADC10SC; 
+    }
+    else if (ADC_counter == 2)
+    {
+        ADC10CTL0 &= ~ADC10ENC;
+        ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_14;
+        ADCTResult_y = ADC10MEM0;
+        ADC_counter++;
+        ADC10CTL0 |= ADC10ENC | ADC10SC; 
+    }
+    else if (ADC_counter == 4)
+    {
+        ADC10CTL0 &= ~ADC10ENC;
+        ADC10MCTL0 = ADC10SREF_0 + ADC10INCH_12;
+        ADCTResult_z = ADC10MEM0;
+        ADC_counter++;
+        ADC10CTL0 |= ADC10ENC | ADC10SC; 
+    }
+
+
 }
 
