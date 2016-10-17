@@ -29,14 +29,12 @@ int main(void) {
 	uc_8 buttonState = 0; //buton status
 	while (1)
 	{
-
-		//__bis_SR_register(LPM4_bits + GIE);	// Enter LPM4 with interrupts enabled
-    switchesRead(button1Pin, &buttonState);
-    ledsWrite(led1Pin, buttonState);
-    switchesRead(button2Pin, &buttonState);
-    ledsWrite(led2Pin, buttonState);
-    getThermisterVal();
-	printf("%s%d\n", "Temp = ", (int)ADCTResult_t);
+		switchesRead(button1Pin, &buttonState);
+		ledsWrite(led1Pin, buttonState);
+		switchesRead(button2Pin, &buttonState);
+		ledsWrite(led2Pin, buttonState);
+		getThermisterVal();
+		printf("%s%d\n", "Temp = ", (int)ADCTResult_t);
 	}
 	return 0;
 }
