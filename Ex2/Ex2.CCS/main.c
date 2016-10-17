@@ -17,16 +17,16 @@
 unsigned int ADCTResult_t;
 
 int main(void) {
-  WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
+	WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
 	ledsInit(led1Pin); 				// Init leds
-  ledsInit(led2Pin);
+	ledsInit(led2Pin);
 	switchesInit(button1Pin); 			// Init Switches
-  switchesInit(button2Pin);
-  SetupThermistor();			// Init Temp sensor
+	switchesInit(button2Pin);
+	SetupThermistor();			// Init Temp sensor
 	CalibrateADC();				// Calibrate analog to digital convertor
 	//Start the first sample. If this is not done the ADC10 interupt will not trigger.
 	ADC10CTL0 |= ADC10ENC | ADC10SC;
-  uc_8 buttonState = 0; //buton status
+	uc_8 buttonState = 0; //buton status
 	while (1)
 	{
 
@@ -36,7 +36,7 @@ int main(void) {
     switchesRead(button2Pin, &buttonState);
     ledsWrite(led2Pin, buttonState);
     getThermisterVal();
-		printf("%s%d\n", "Temp = ", (int)ADCTResult_t);
+	printf("%s%d\n", "Temp = ", (int)ADCTResult_t);
 	}
 	return 0;
 }
