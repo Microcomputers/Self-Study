@@ -4,14 +4,39 @@
 volatile unsigned char ThreshRange[3]={0,0,0};
 extern unsigned int CalValue_t;
 
-void LEDs_INIT()
+void ledsInit(uc_8 ledNumber)
 {
-	//we'll use LEDs PJ0.1 & PJ0.2
-	PJDIR |= BIT0 + BIT1; //set pins PJ.0 and PJ.1 to outputs
-	PJOUT &= ~(BIT0 + BIT1); //set pins to low
+	uc_8 temp = 1 << (ledNumber - 1);
+
+	uc_8 PJMASK = (uc_16)temp & 0x000F;
+	uc_8 P3MASK = temp & 0xF0;
+
+	PJOUT &= ~PJMASK;
+	P3OUT &= ~P3MASK;
+
+	PJDIR |= PJMASK;
+	P3DIR |= P3MASK;
 }
 
-void SWITCHEs_INIT(uc_8 buttonNumber)
+bool ledsWrite(uc_8 ledNumber, uc_8 value)
+{
+	uc_8 temp = 1 << (ledNumber - 1);
+
+	uc_8 PJMASK = (uc_16)temp & 0x000F;
+	uc_8 P3MASK = temp & 0xF0;
+
+	if (value != 0){
+		PJOUT |= PJMASK;
+		P3OUT |= P3MASK;
+	} else {
+		PJOUT &= ~PJMASK;
+		P3OUT &= ~P3MASK;
+	}
+
+	return TRUE;
+}
+
+void switchesInit(uc_8 buttonNumber)
 {
 	// Enable on-board switches
 	uc_8 temp = 1 << (buttonNumber - 1);
@@ -27,7 +52,7 @@ void SWITCHEs_INIT(uc_8 buttonNumber)
 }
 
 //reade switch values, (digitalRead())
-bool SWITCHEs_READ(uc_8 buttonNumber, uc_8 *value)
+bool switchesRead(uc_8 buttonNumber, uc_8 *value)
 {
 	uc_8 temp = 1 << (buttonNumber - 1);
 	uc_8 P4MASK = temp & 0x03;

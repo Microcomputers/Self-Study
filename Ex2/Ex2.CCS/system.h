@@ -5,6 +5,8 @@
 // Type definitions
 typedef unsigned char uc;
 typedef enum {FALSE, TRUE} bool;
+typedef unsigned char uc_8;
+typedef unsigned int uc_16;
 
 //variables
 //
@@ -15,11 +17,15 @@ typedef enum {FALSE, TRUE} bool;
 #define SW_HALF_DEB_CONST	SW_DEB_CONST/2	// Shorter debounce time model assuming half
 
 //Clock init
-void CLOCK_INTI();
+void clockInit();
 //LEDs init
-void LEDs_INIT();
+void ledsInit(uc_8 ledNumber);
+//LEDs Write
+bool ledsWrite(uc_8 ledNumber, uc_8 value);
 //Switches init
-void SWITCHEs_INIT(uc_8 buttonNumber);
+void switchesInit(uc_8 buttonNumber);
+//Switches Read
+bool switchesRead(uc_8 buttonNumber, uc_8 *value);
 
 void SetupThermistor(void);
 void ShutDownTherm(void);
