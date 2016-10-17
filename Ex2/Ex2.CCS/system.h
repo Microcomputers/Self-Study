@@ -1,9 +1,10 @@
 #ifndef SYSTEM_H
-#define SYSTEM_H 
+#define SYSTEM_H
 #include <msp430fr5739.h>
 
 // Type definitions
 typedef unsigned char uc;
+typedef enum {FALSE, TRUE} bool;
 
 //variables
 //
@@ -18,7 +19,7 @@ void CLOCK_INTI();
 //LEDs init
 void LEDs_INIT();
 //Switches init
-void SWITCHEs_INIT();
+void SWITCHEs_INIT(uc_8 buttonNumber);
 
 void SetupThermistor(void);
 void ShutDownTherm(void);
