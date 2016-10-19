@@ -114,6 +114,6 @@ __interrupt void ADC10_ISR (void)
         ADC10CTL0 |= ADC10ENC | ADC10SC; 
     }
 
-
+    ADC_counter = 0;
 }
 

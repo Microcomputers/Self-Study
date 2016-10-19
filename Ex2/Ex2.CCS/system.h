@@ -16,10 +16,17 @@ typedef unsigned int uc_16;
 #define SW_DEB_CONST		1600			// Load into TA1CCR0 the value SW_DEB_CONST i.e. debounce time = 1600*1/8000 = 200ms
 #define SW_HALF_DEB_CONST	SW_DEB_CONST/2	// Shorter debounce time model assuming half
 
-//Pin Definintion
-#define ACC_X_PIN BIT0
-#define ACC_Y_PIN BIT1
-#define ACC_Z_PIN BIT2
+// Pin Definitions
+#define ACC_PWR_PIN       BIT7
+#define ACC_PWR_PORT_DIR  P2DIR
+#define ACC_PWR_PORT_OUT  P2OUT
+#define ACC_PORT_DIR      P3DIR
+#define ACC_PORT_OUT      P3OUT
+#define ACC_PORT_SEL0     P3SEL0
+#define ACC_PORT_SEL1     P3SEL1
+#define ACC_X_PIN         BIT0
+#define ACC_Y_PIN         BIT1
+#define ACC_Z_PIN         BIT2
 
 // Accelerometer Input Channel Definitions
 #define ACC_X_CHANNEL ADC10INCH_12

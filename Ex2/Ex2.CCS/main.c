@@ -33,8 +33,8 @@ int main(void) {
 		ledsWrite(led1Pin, buttonState);
 		switchesRead(button2Pin, &buttonState);
 		ledsWrite(led2Pin, buttonState);
-		getThermisterVal();
-		printf("%s%d\n", "Temp = ", (int)ADCTResult_t);
+		//getThermisterVal();
+		printf("%s%d\t%s%d\t%s%d\t%s%d\n", "Temp = ", (int)ADCTResult_t, "X = ", (int)ADCTResult_x, "Y = ", (int)ADCTResult_y, "Z = ", (int)ADCTResult_z);
 	}
 	return 0;
 }
