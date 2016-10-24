@@ -4,7 +4,7 @@
 	<deviceVariant value="MSP430FR5739"/>
 	<deviceFamily value="MSP430"/>
 	<deviceEndianness value="little"/>
-	<codegenToolVersion value="15.12.2.LTS"/>
+	<codegenToolVersion value="15.12.1.LTS"/>
 	<isElfFormat value="true"/>
 	<connection value="common/targetdb/connections/TIMSP430-USB.xml"/>
 	<linkerCommandFile value="lnk_msp430fr5739.cmd"/>

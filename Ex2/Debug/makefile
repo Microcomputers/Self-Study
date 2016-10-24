@@ -10,10 +10,8 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./adc.obj" \
 "./main.obj" \
 "./system.obj" \
-"./uart.obj" \
 "../lnk_msp430fr5739.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibmath.a \
@@ -124,40 +122,40 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-LEDsAndPushButtons.out \
+Ex2_accel.CCS.out \
 
 EXE_OUTPUTS__QUOTED += \
-"LEDsAndPushButtons.out" \
+"Ex2_accel.CCS.out" \
 
 BIN_OUTPUTS += \
-LEDsAndPushButtons.hex \
+Ex2_accel.CCS.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"LEDsAndPushButtons.hex" \
+"Ex2_accel.CCS.hex" \
 
 
 # All Target
-all: LEDsAndPushButtons.out
+all: Ex2_accel.CCS.out
 
 # Tool invocations
-LEDsAndPushButtons.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+Ex2_accel.CCS.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP430 Linker'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/bin/cl430" -vmspx --use_hw_mpy=F5 --advice:power=all -g --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z -m"LEDsAndPushButtons.map" --heap_size=300 --stack_size=160 --cinit_hold_wdt=on -i"C:/ti/ccsv6/ccs_base/msp430/include" -i"C:/ti/ccsv6/ccs_base/msp430/lib/5xx_6xx_FRxx" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/include" --reread_libs --display_error_number --warn_sections --diag_wrap=off --xml_link_info="LEDsAndPushButtons_linkInfo.xml" --use_hw_mpy=F5 --rom_model -o "LEDsAndPushButtons.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/bin/cl430" -vmspx --use_hw_mpy=F5 --advice:power=all -g --define=__MSP430FR5739__ --diag_warning=225 --display_error_number --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z -m"Ex2_accel.CCS.map" --heap_size=300 --stack_size=160 --cinit_hold_wdt=on -i"C:/ti/ccsv6/ccs_base/msp430/include" -i"C:/ti/ccsv6/ccs_base/msp430/lib/5xx_6xx_FRxx" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/include" --reread_libs --display_error_number --warn_sections --diag_wrap=off --xml_link_info="Ex2_accel.CCS_linkInfo.xml" --use_hw_mpy=F5 --rom_model -o "Ex2_accel.CCS.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-LEDsAndPushButtons.hex: $(EXE_OUTPUTS)
+Ex2_accel.CCS.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: MSP430 Hex Utility'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "LEDsAndPushButtons.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_15.12.1.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "Ex2_accel.CCS.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "adc.d" "main.d" "system.d" "uart.d" 
-	-$(RM) "adc.obj" "main.obj" "system.obj" "uart.obj" 
+	-$(RM) "main.d" "system.d" 
+	-$(RM) "main.obj" "system.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

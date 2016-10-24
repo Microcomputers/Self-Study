@@ -44,7 +44,7 @@
 /* -heap   0x0100                                   HEAP AREA SIZE            */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-/* Version: 1.192                                                             */
+/* Version: 1.188                                                             */
 /*----------------------------------------------------------------------------*/
 
 /****************************************************************************/
@@ -153,8 +153,8 @@ SECTIONS
        } ALIGN(0x0200), RUN_START(fram_rx_start)
     } > FRAM
 
-#ifdef __TI_COMPILER_VERSION__
-  #if __TI_COMPILER_VERSION__ >= 15009000
+#ifdef __TI_COMPILER_VERSION
+  #if __TI_COMPILER_VERSION >= 15009000
     #ifndef __LARGE_DATA_MODEL__
     .TI.ramfunc : {} load=FRAM, run=RAM, table(BINIT)
     #else
