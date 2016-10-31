@@ -113,6 +113,10 @@ void SystemInit(void) {
 	TA0CCR1 = PWM_ACLK_TCNT_LOW;
 	TA0CCTL1 = OUTMOD_3;									// PWM output mode 3: PWM Set/Reset
 	TA0CTL = TASSEL__ACLK + MC__UP + TACLR;					// Set source as ACLK, continuous up mode, start timer
+
+	// Set P1.2 as output (low)
+	P1DIR |= (BIT2);
+	P1OUT &= ~ (BIT2);
 }
 
 // Interrupt driven main
@@ -171,6 +175,10 @@ __interrupt void Timer0_A0_CCRx_ISR(void) {
 		case TA0IV_NONE: break;								// Vector 0: No interrupts
 		case TA0IV_TACCR1: break;							// Vector 2: TA0CCR1 CCIFG
 		case TA0IV_TACCR2: {								// Vector 4: TA0CCR2 CCIFG
+			// Toggle P1.2 on and off
+			P1OUT ^= (BIT2);
+			__delay_cycles(2000);
+			P1OUT ^= (BIT2);
 			// When S1 pressed, LED2 is toggled according to PWM frequency generated at P1.0
 			PJOUT ^= (BIT1);								// Toggle PJ.1
 			break;
