@@ -28,7 +28,13 @@ int main()
 			
 		}
 		timer1.end();
-		printf("%d\n",(int)timer1.getTime());
+		printf("%s%d\t", "oldtcnt: ",(int)timer1.getoldtcnt());
+		printf("%s%d\t", "count: ",(int)timer1.getcount());
+		printf("%s%d\t", "min: ",(int)timer1.getmin());
+		printf("%s%d\t", "mincount: ",(int)timer1.getmincount());
+		printf("%s%d\t", "max: ",(int)timer1.getmax());
+		printf("%s%d\t", "maxcount: ",(int)timer1.getmaxcount());
+		printf("%s%d\n", "totaltime: ",(int)timer1.gettotaltime());
 	}
 	return 0;
 }

@@ -22,10 +22,16 @@ public:
 	void init();		// test init
 	void start();		// test start
 	void end();			// test end
-	uint16_t getTime();		// returns totaltime
 	void intervalSet (int interval);	//
 	void callBackSet(void (*funcPtr)()); //pointer to a function 
 	void update();		//increment the counter
+	uint16_t getoldtcnt() 	{return this->oldtcnt;} 	//returns oldtcnt
+	uint16_t getcount() 	{return this->count;} 		//returns count
+	uint16_t getmin() 		{return this->min;} 		//returns min
+	uint16_t getmincount()  {return this->mincount;} 	//returns mincount
+	uint16_t getmax() 		{return this->max;} 		//returns max
+	uint16_t getmaxcount()  {return this->maxcount;} 	//returns maxcount
+	uint16_t gettotaltime() {return this->totaltime;}	//returns totaltime
 };
 
 #endif

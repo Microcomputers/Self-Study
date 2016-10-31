@@ -56,11 +56,6 @@ void TimeTest::end ()
 	
 }
 
-uint16_t TimeTest::getTime()
-{
-	return this->totaltime;
-}
-
 void TimeTest::intervalSet (int interval)
 {
 	this->interval = interval;
