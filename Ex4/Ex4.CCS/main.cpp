@@ -4,13 +4,22 @@
 #include "TimeTest.h"
 
 
-
+TimeTest timer1; //Declare Timer1 of TimeTest
+void ledToggle(); // user defined function
 
 int main()
 {
-	TimeTest timer1; //Declare Timer1 of TimeTest
-
+	//setup timer
+	TA0CTL = MC__UP | TASSEL__SMCLK | TAIE;
+	TA0CCR0 = 1000;
+	TA0CTL &= ~TAIFG;
+	//init LEDs
+	P3OUT &= ~0xF0;
+	P3DIR |= 0xF0;
+	__enable_interrupt();
 	timer1.init();
+	timer1.intervalSet(1000);
+	timer1.callBackSet(&ledToggle);
 	while (1)
 	{
 		timer1.start();
@@ -22,4 +31,16 @@ int main()
 		printf("%d\n",(int)timer1.getTime());
 	}
 	return 0;
+}
+
+void ledToggle()
+{
+	P3OUT ^= 0xF0;
+}
+
+#pragma vector=TIMER0_A1_VECTOR
+__interrupt void TIMER0_A1_ISR(void)
+{
+	timer1.update();
+	TA0CTL &= ~TAIFG;
 }

@@ -11,7 +11,7 @@ void TimeTest::init ()
 //initialises each measurement
 void TimeTest::start ()
 {
-	oldtcnt = TB0R;
+	this->oldtcnt = TB0R;
 }
 
 void TimeTest::end ()
@@ -19,36 +19,36 @@ void TimeTest::end ()
 	uint16_t newtcnt;
  //If called before TimeTestStart leave now!!!
  // If the tcnt value is zero and no previous count get out!
-	if (!((oldtcnt == 0)&&(count == 0))) 
+	if (!((this->oldtcnt == 0)&&(this->count == 0))) 
 	{	
 		newtcnt = TB0R;
-		count += 1; // increment count
-		newtcnt -= (oldtcnt + TimeTestOffset);
-		totaltime += newtcnt;
-		if (count == 1) 
+		this->count += 1; // increment count
+		newtcnt -= (this->oldtcnt + TimeTestOffset);
+		this->totaltime += newtcnt;
+		if (this->count == 1) 
 		{ // If first time through
-			min = newtcnt;
-			max = newtcnt;
-			mincount = 1;
-			maxcount = 1;
+			this->min = newtcnt;
+			this->max = newtcnt;
+			this->mincount = 1;
+			this->maxcount = 1;
 		}
-		else if( newtcnt < min)
+		else if( newtcnt < this->min)
 		{ // New minimum
-			min = newtcnt;
-			mincount = 1;
+			this->min = newtcnt;
+			this->mincount = 1;
 		}
-		else if( newtcnt == min )
+		else if( newtcnt == this->min )
 		{
-			mincount++;
+			this->mincount++;
 		} //another at minimum
-		else if( newtcnt > max)
+		else if( newtcnt > this->max)
 		{ // New maximum
-			max = newtcnt;
-			maxcount = 1;
+			this->max = newtcnt;
+			this->maxcount = 1;
 		}
-		else if( newtcnt == max )
+		else if( newtcnt == this->max )
 		{
-			maxcount++; 
+			this->maxcount++; 
 		} // another at maximum
 	    else {}
 
@@ -59,4 +59,27 @@ void TimeTest::end ()
 uint16_t TimeTest::getTime()
 {
 	return this->totaltime;
+}
+
+void TimeTest::intervalSet (int interval)
+{
+	this->interval = interval;
+}
+
+void TimeTest::callBackSet(void (*funcPtr)())
+{
+	this->callBack = funcPtr;
+}
+
+void TimeTest::update()
+{
+	if (this->interval >= this->timerCount)
+	{
+		this->timerCount = 0;
+		this->callBack();
+	}
+	else
+	{
+		this->timerCount++;
+	}
 }

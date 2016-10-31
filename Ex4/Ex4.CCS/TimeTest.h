@@ -13,6 +13,9 @@ private:
 	uint16_t max;
 	uint16_t maxcount;
 	uint16_t totaltime;
+	int interval;
+	int timerCount;
+	void (*callBack)();
 
 public:
 
@@ -20,6 +23,9 @@ public:
 	void start();		// test start
 	void end();			// test end
 	uint16_t getTime();		// returns totaltime
+	void intervalSet (int interval);	//
+	void callBackSet(void (*funcPtr)()); //pointer to a function 
+	void update();		//increment the counter
 };
 
 #endif
