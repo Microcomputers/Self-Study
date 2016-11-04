@@ -1,40 +1,25 @@
-#include <stdio.h>
 #include <msp430fr5739.h>
 #include "system.h"
-#include "adc.h"
-//#include "uart.h"
+#include <stdio.h>
 /*
- 	main.c
-	1. Switches and LEDs
-	2.
-	3. Temp sens
+ * main.c
  */
-#define led1Pin 4
-#define led2Pin 3
-#define button1Pin 1
-#define button2Pin 2
 
-unsigned int ADCTResult_t, ADCTResult_x, ADCTResult_y, ADCTResult_z;
+extern unsigned int ADCResult_X, ADCResult_Y, ADCResult_Z;
+
+
 
 int main(void) {
-	WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
-	ledsInit(led1Pin); 				// Init leds
-	ledsInit(led2Pin);
-	switchesInit(button1Pin); 			// Init Switches
-	switchesInit(button2Pin);
-	SetupThermistor();			// Init Temp sensor
-	CalibrateADC();				// Calibrate analog to digital convertor
-	//Start the first sample. If this is not done the ADC10 interupt will not trigger.
-	ADC10CTL0 |= ADC10ENC | ADC10SC;
-	uc_8 buttonState = 0; //buton status
+    WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
+	systemInit();				// setup pins
+	startUpSequence();			// Copy Ti's fancy LED boot up trick
+	setupAccel();				//Setup ADC nad Accel
+	calibrateADC();
+	//If this is not done the ADC10 interupt will not trigger.
+	ADC10CTL0 |= ADC10ENC | ADC10SC; //Start the first sample.
 	while (1)
 	{
-		switchesRead(button1Pin, &buttonState);
-		ledsWrite(led1Pin, buttonState);
-		switchesRead(button2Pin, &buttonState);
-		ledsWrite(led2Pin, buttonState);
-		//getThermisterVal();
-		printf("%s%d\t%s%d\t%s%d\t%s%d\n", "Temp = ", (int)ADCTResult_t, "X = ", (int)ADCTResult_x, "Y = ", (int)ADCTResult_y, "Z = ", (int)ADCTResult_z);
+		printf("%s%d\t%s%d\t%s%d\n", "X = ", (int)ADCResult_X, "Y = ", (int)ADCResult_Y, "Z = ", (int)ADCResult_Z);
 	}
 	return 0;
 }
