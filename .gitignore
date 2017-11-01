@@ -4,6 +4,7 @@
 !*.*
 !makefile
 !Makefile
+!LICENSE
 
 *.out
 *.d
