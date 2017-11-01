@@ -176,9 +176,9 @@ __interrupt void Timer0_A0_CCRx_ISR(void) {
 		case TA0IV_TACCR1: break;							// Vector 2: TA0CCR1 CCIFG
 		case TA0IV_TACCR2: {								// Vector 4: TA0CCR2 CCIFG
 			// Toggle P1.2 on and off
-			P1OUT ^= (BIT2);
+			P1OUT ^= (BIT7);
 			__delay_cycles(2000);
-			P1OUT ^= (BIT2);
+			P1OUT ^= (BIT7);
 			// When S1 pressed, LED2 is toggled according to PWM frequency generated at P1.0
 			PJOUT ^= (BIT1);								// Toggle PJ.1
 			break;
