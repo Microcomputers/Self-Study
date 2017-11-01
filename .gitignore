@@ -11,13 +11,13 @@
 *obj
 
 /Flashing_LEDs_Switches
-../../Debug
-../../targetConfigs
+/Debug
+/targetConfigs
 
-../../.launches
-../../.settings
+.launches
+.settings
 
-../../.ccsproject
-../../.cproject
-../../.project
-../../*.cmd
+.ccsproject
+.cproject
+.project
+*.cmd
