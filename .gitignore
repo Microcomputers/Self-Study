@@ -10,5 +10,13 @@
 *obj
 
 /Flashing_LEDs_Switches
+/Debug
+/targetConfigs
 
 .launches
+.settings
+
+.ccsproject
+.cproject
+.project
+*.cmd
